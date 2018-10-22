@@ -1,0 +1,14 @@
+[package]
+name = "uid"
+version = "0.0.0"
+authors = ["Daniel Mueller <deso@posteo.net>"]
+license = "GPL-3.0+"
+homepage = "https://github.com/d-e-s-o/uid"
+repository = "https://github.com/d-e-s-o/uid.git"
+readme = "README.md"
+keywords = ["id", "number", "type", "unique"]
+description = """
+A crate for the creation of unique IDs.
+"""
+
+[dependencies]
