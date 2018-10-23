@@ -43,6 +43,7 @@ use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result;
 use std::marker::PhantomData;
+use std::num::NonZeroUsize;
 use std::sync::atomic::AtomicUsize;
 use std::sync::atomic::Ordering;
 
@@ -98,7 +99,7 @@ pub struct Id<T>
 where
   T: Copy,
 {
-  id: usize,
+  id: NonZeroUsize,
   phantom: PhantomData<T>,
 }
 
@@ -106,20 +107,25 @@ impl<T> Id<T>
 where
   T: Copy,
 {
-  /// Create a new unique `Id`.
-  pub fn new() -> Self {
-    static NEXT_ID: AtomicUsize = AtomicUsize::new(0);
-
-    let id = NEXT_ID.fetch_add(1, Ordering::Relaxed);
+  /// Create a new `Id` using the given value.
+  fn new_unchecked(id: usize) -> Self {
     Id {
-      id: id,
+      id: unsafe { NonZeroUsize::new_unchecked(id) },
       phantom: PhantomData,
     }
   }
 
+  /// Create a new unique `Id`.
+  pub fn new() -> Self {
+    static NEXT_ID: AtomicUsize = AtomicUsize::new(1);
+
+    let id = NEXT_ID.fetch_add(1, Ordering::Relaxed);
+    Self::new_unchecked(id)
+  }
+
   /// Retrieve the underlying `usize` value.
   pub fn get(&self) -> usize {
-    self.id
+    self.id.get()
   }
 }
 
@@ -150,6 +156,8 @@ mod tests {
   use std::collections::BTreeSet;
   use std::collections::HashSet;
   use std::iter::FromIterator;
+  use std::mem::size_of;
+  use std::mem::size_of_val;
   use std::thread::spawn;
 
 
@@ -191,19 +199,19 @@ mod tests {
 
   #[test]
   fn debug() {
-    let id = TestId {
-      id: 42,
-      phantom: Default::default(),
-    };
+    let id = TestId::new_unchecked(42);
     assert_eq!(format!("{:?}", id), "Id { id: 42 }");
   }
 
   #[test]
   fn display() {
-    let id = TestId {
-      id: 43,
-      phantom: Default::default(),
-    };
+    let id = TestId::new_unchecked(43);
     assert_eq!(format!("{}", id), "43");
+  }
+
+  #[test]
+  fn size() {
+    let id = Some(TestId::new());
+    assert_eq!(size_of_val(&id), size_of::<TestId>());
   }
 }
