@@ -2,6 +2,7 @@ uid
 ===
 
 - [Documentation][docs-rs]
+- [Changelog](CHANGELOG.md)
 
 **uid** (short for **u**nique **id**entifiers) is a crate for creating
 unique IDs for usage in a Rust program. IDs can have many purposes in
