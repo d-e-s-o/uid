@@ -1,6 +1,7 @@
 Unreleased
 ----------
 - Made the crate `no_std` compatible
+- Added categories to `Cargo.toml`
 
 
 0.1.1
