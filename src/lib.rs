@@ -17,6 +17,7 @@
 // * along with this program.  If not, see <http://www.gnu.org/licenses/>. *
 // *************************************************************************
 
+#![no_std]
 #![allow(
   unknown_lints,
   block_in_if_condition_stmt,
@@ -38,14 +39,18 @@
 //! A crate providing in-memory IDs. Among others, the IDs are
 //! guaranteed to be unique, even when created on different threads.
 
-use std::fmt::Debug;
-use std::fmt::Display;
-use std::fmt::Formatter;
-use std::fmt::Result;
-use std::marker::PhantomData;
-use std::num::NonZeroUsize;
-use std::sync::atomic::AtomicUsize;
-use std::sync::atomic::Ordering;
+#[cfg(test)]
+#[macro_use]
+extern crate std;
+
+use core::fmt::Debug;
+use core::fmt::Display;
+use core::fmt::Formatter;
+use core::fmt::Result;
+use core::marker::PhantomData;
+use core::num::NonZeroUsize;
+use core::sync::atomic::AtomicUsize;
+use core::sync::atomic::Ordering;
 
 
 /// A struct representing IDs usable for various purposes.
@@ -159,6 +164,7 @@ mod tests {
   use std::mem::size_of;
   use std::mem::size_of_val;
   use std::thread::spawn;
+  use std::vec::Vec;
 
 
   type TestId = Id<u32>;

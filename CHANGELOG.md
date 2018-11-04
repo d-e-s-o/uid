@@ -1,3 +1,8 @@
+Unreleased
+----------
+- Made the crate `no_std` compatible
+
+
 0.1.1
 -----
 - Made implementation more friendly to size optimizations (e.g., as
