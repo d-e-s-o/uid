@@ -1,5 +1,5 @@
-Unreleased
-----------
+0.1.3
+-----
 - Adjusted crate to use Rust Edition 2018
 - Implement `Default` trait for `Id` struct
 - Removed `#![deny(warnings)]` attribute and demoted lints prone to
