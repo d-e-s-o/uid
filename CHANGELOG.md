@@ -1,6 +1,7 @@
 Unreleased
 ----------
 - Adjusted crate to use Rust Edition 2018
+- Implement `Default` trait for `Id` struct
 
 
 0.1.2

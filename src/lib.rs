@@ -129,6 +129,16 @@ where
   }
 }
 
+impl<T> Default for Id<T>
+where
+  T: Copy,
+{
+  /// Create a new unique `Id`.
+  fn default() -> Self {
+    Self::new()
+  }
+}
+
 impl<T> Debug for Id<T>
 where
   T: Copy,
