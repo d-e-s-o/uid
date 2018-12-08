@@ -1,3 +1,8 @@
+Unreleased
+----------
+- Adjusted crate to use Rust Edition 2018
+
+
 0.1.2
 -----
 - Made the crate `no_std` compatible

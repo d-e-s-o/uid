@@ -18,11 +18,6 @@
 // *************************************************************************
 
 #![no_std]
-#![allow(
-  unknown_lints,
-  block_in_if_condition_stmt,
-  redundant_field_names,
-)]
 #![deny(
   future_incompatible,
   missing_debug_implementations,
@@ -129,7 +124,7 @@ where
   }
 
   /// Retrieve the underlying `usize` value.
-  pub fn get(&self) -> usize {
+  pub fn get(self) -> usize {
     self.id.get()
   }
 }
