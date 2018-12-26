@@ -13,4 +13,7 @@ description = """
 A crate for the creation of unique IDs.
 """
 
+[badges]
+gitlab = { repository = "d-e-s-o/uid", branch = "master" }
+
 [dependencies]

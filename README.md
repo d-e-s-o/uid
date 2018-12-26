@@ -1,3 +1,5 @@
+[![pipeline](https://gitlab.com/d-e-s-o/uid/badges/master/pipeline.svg)](https://gitlab.com/d-e-s-o/uid/commits/master)
+
 uid
 ===
 

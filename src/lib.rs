@@ -195,7 +195,7 @@ mod tests {
       T: FromIterator<TestId> + IntoIterator,
     {
       let handles = (0..100)
-        .map(|_| spawn(|| TestId::new()))
+        .map(|_| spawn(TestId::new))
         .collect::<Vec<_>>();
 
       let result = handles

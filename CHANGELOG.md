@@ -1,3 +1,10 @@
+Unreleased
+----------
+- Enabled CI pipeline comprising building, testing, and linting of the
+  project
+  - Added badge indicating pipeline status
+
+
 0.1.3
 -----
 - Adjusted crate to use Rust Edition 2018
