@@ -1,3 +1,8 @@
+Unreleased
+----------
+- Downgraded `deny` crate-level lints to `warn`
+
+
 0.1.4
 -----
 - Enabled CI pipeline comprising building, testing, and linting of the

@@ -1,7 +1,7 @@
 // lib.rs
 
 // *************************************************************************
-// * Copyright (C) 2018 Daniel Mueller (deso@posteo.net)                   *
+// * Copyright (C) 2018-2019 Daniel Mueller (deso@posteo.net)              *
 // *                                                                       *
 // * This program is free software: you can redistribute it and/or modify  *
 // * it under the terms of the GNU General Public License as published by  *
@@ -18,21 +18,19 @@
 // *************************************************************************
 
 #![no_std]
-#![deny(
+#![warn(
+  future_incompatible,
   missing_copy_implementations,
   missing_debug_implementations,
   missing_docs,
+  rust_2018_compatibility,
+  rust_2018_idioms,
   trivial_casts,
   trivial_numeric_casts,
   unstable_features,
   unused_import_braces,
   unused_qualifications,
   unused_results,
-)]
-#![warn(
-  future_incompatible,
-  rust_2018_compatibility,
-  rust_2018_idioms,
 )]
 
 //! A crate providing in-memory IDs. Among others, the IDs are
