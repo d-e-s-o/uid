@@ -1,4 +1,5 @@
 [![pipeline](https://gitlab.com/d-e-s-o/uid/badges/master/pipeline.svg)](https://gitlab.com/d-e-s-o/uid/commits/master)
+[![coverage](https://gitlab.com/d-e-s-o/uid/badges/master/coverage.svg)](https://gitlab.com/d-e-s-o/uid/-/jobs/artifacts/master/file/kcov/kcov-merged/index.html?job=coverage:kcov)
 [![crates.io](https://img.shields.io/crates/v/uid.svg)](https://crates.io/crates/uid)
 [![Docs](https://docs.rs/uid/badge.svg)](https://docs.rs/uid)
 [![rustc](https://img.shields.io/badge/rustc-1.31+-blue.svg)](https://blog.rust-lang.org/2018/12/06/Rust-1.31-and-rust-2018.html)
