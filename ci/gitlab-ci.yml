@@ -10,8 +10,8 @@ image: "rust:1.31.0"
 build-test:cargo:
   script:
   - rustc --version && cargo --version
-  - cargo build --all --verbose
-  - cargo test --all --verbose
+  - cargo build --lib --tests --verbose
+  - cargo test --verbose
 
 lint:clippy:
   script:
