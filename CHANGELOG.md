@@ -3,6 +3,7 @@ Unreleased
 - Downgraded `deny` crate-level lints to `warn`
 - Adjusted pipeline to collect code coverage
   - Added badge indicating showing code coverage percentage
+- Excluded unnecessary files from being contained in release bundle
 
 
 0.1.4

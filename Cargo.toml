@@ -12,6 +12,7 @@ keywords = ["id", "number", "type", "unique"]
 description = """
 A crate for the creation of unique IDs.
 """
+include = ["src/**/*", "LICENSE", "README.*", "CHANGELOG.*"]
 
 [badges]
 gitlab = { repository = "d-e-s-o/uid", branch = "master" }
