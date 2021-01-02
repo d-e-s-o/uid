@@ -1,5 +1,5 @@
-Unreleased
-----------
+0.1.5
+-----
 - Downgraded `deny` crate-level lints to `warn`
 - Adjusted pipeline to collect code coverage
   - Added badge indicating showing code coverage percentage
