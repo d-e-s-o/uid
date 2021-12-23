@@ -188,6 +188,7 @@ mod tests {
 
   #[test]
   fn thread_safety() {
+    #[allow(clippy::needless_collect)]
     fn test<T>()
     where
       T: FromIterator<TestId> + IntoIterator,

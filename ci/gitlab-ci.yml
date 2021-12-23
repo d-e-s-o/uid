@@ -29,6 +29,7 @@ test:cargo:
   - cargo test --verbose
 
 lint:clippy:
+  image: "rust:latest"
   stage: test
   dependencies:
     - build:cargo
