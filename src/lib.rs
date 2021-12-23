@@ -1,7 +1,7 @@
 // lib.rs
 
 // *************************************************************************
-// * Copyright (C) 2018-2019 Daniel Mueller (deso@posteo.net)              *
+// * Copyright (C) 2018-2021 Daniel Mueller (deso@posteo.net)              *
 // *                                                                       *
 // * This program is free software: you can redistribute it and/or modify  *
 // * it under the terms of the GNU General Public License as published by  *
@@ -27,6 +27,7 @@
   rust_2018_idioms,
   trivial_casts,
   trivial_numeric_casts,
+  unsafe_op_in_unsafe_fn,
   unstable_features,
   unused_import_braces,
   unused_qualifications,
@@ -110,8 +111,13 @@ where
   T: Copy,
 {
   /// Create a new `Id` using the given value.
-  fn new_unchecked(id: usize) -> Self {
-    Id {
+  ///
+  /// # Safety
+  /// - `id` must not be zero
+  /// - `id` should be unique with respect to other IDs created for this
+  ///   `T` to preserve the invariant that IDs are unique
+  unsafe fn new_unchecked(id: usize) -> Self {
+    Self {
       id: unsafe { NonZeroUsize::new_unchecked(id) },
       phantom: PhantomData,
     }
@@ -122,7 +128,13 @@ where
     static NEXT_ID: AtomicUsize = AtomicUsize::new(1);
 
     let id = NEXT_ID.fetch_add(1, Ordering::Relaxed);
-    Self::new_unchecked(id)
+    assert_ne!(id, 0, "overflow detected; please reconsider your use case");
+
+    // SAFETY: The provided ID cannot be 0 (unless we overflow, in which
+    //         case we have other problems). We ensure uniqueness
+    //         because we increment IDs and this is the only constructor
+    //         for `Id` objects.
+    unsafe { Self::new_unchecked(id) }
   }
 
   /// Retrieve the underlying `usize` value.
@@ -213,13 +225,13 @@ mod tests {
 
   #[test]
   fn debug() {
-    let id = TestId::new_unchecked(42);
+    let id = unsafe { TestId::new_unchecked(42) };
     assert_eq!(format!("{:?}", id), "Id { id: 42 }");
   }
 
   #[test]
   fn display() {
-    let id = TestId::new_unchecked(43);
+    let id = unsafe { TestId::new_unchecked(43) };
     assert_eq!(format!("{}", id), "43");
   }
 

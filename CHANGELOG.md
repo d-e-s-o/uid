@@ -1,3 +1,9 @@
+Unreleased
+----------
+- Adjusted `Id::new` to panic when a `usize` counter overflow is
+  detected
+
+
 0.1.5
 -----
 - Downgraded `deny` crate-level lints to `warn`
