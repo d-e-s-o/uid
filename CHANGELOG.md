@@ -2,6 +2,7 @@ Unreleased
 ----------
 - Adjusted `Id::new` to panic when a `usize` counter overflow is
   detected
+- Annotated `Id` type with `#[repr(transparent)]`
 
 
 0.1.5

@@ -98,6 +98,7 @@ use core::sync::atomic::Ordering;
 /// // numeric types such as `usize` or `u64`.
 /// ```
 #[derive(Clone, Copy, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[repr(transparent)]
 pub struct Id<T>
 where
   T: Copy,
@@ -239,5 +240,6 @@ mod tests {
   fn size() {
     let id = Some(TestId::new());
     assert_eq!(size_of_val(&id), size_of::<TestId>());
+    assert_eq!(size_of::<TestId>(), size_of::<usize>());
   }
 }
