@@ -117,6 +117,7 @@ where
   /// - `id` must not be zero
   /// - `id` should be unique with respect to other IDs created for this
   ///   `T` to preserve the invariant that IDs are unique
+  #[inline]
   unsafe fn new_unchecked(id: usize) -> Self {
     Self {
       id: unsafe { NonZeroUsize::new_unchecked(id) },
@@ -125,6 +126,7 @@ where
   }
 
   /// Create a new unique `Id`.
+  #[inline]
   pub fn new() -> Self {
     static NEXT_ID: AtomicUsize = AtomicUsize::new(1);
 
@@ -139,6 +141,7 @@ where
   }
 
   /// Retrieve the underlying `usize` value.
+  #[inline]
   pub fn get(self) -> usize {
     self.id.get()
   }
@@ -149,6 +152,7 @@ where
   T: Copy,
 {
   /// Create a new unique `Id`.
+  #[inline]
   fn default() -> Self {
     Self::new()
   }
@@ -158,6 +162,7 @@ impl<T> Debug for Id<T>
 where
   T: Copy,
 {
+  #[inline]
   fn fmt(&self, f: &mut Formatter<'_>) -> Result {
     f.debug_struct("Id").field("id", &self.id).finish()
   }
@@ -168,6 +173,7 @@ where
   T: Copy,
 {
   /// Format the `Id` into the given formatter.
+  #[inline]
   fn fmt(&self, f: &mut Formatter<'_>) -> Result {
     write!(f, "{}", self.id)
   }
