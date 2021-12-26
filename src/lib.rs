@@ -53,9 +53,11 @@ use core::sync::atomic::Ordering;
 
 /// A struct representing IDs usable for various purposes.
 ///
-/// Note that Rust only truly provides the implementations of the
-/// various traits we derive from when `T` also provides them. Note
-/// furthermore that we want all ID objects to be lightweight and,
+/// Except for [`Clone`], [`Copy`], [`Debug`], and [`Display`] which are
+/// implemented unconditionally, the type will only implement [`Eq`],
+/// [`Ord`], [`PartialEq`], [`PartialOrd`], and [`Hash`] if the provided
+/// `T` implements them.
+/// Note furthermore that we want all ID objects to be lightweight and,
 /// hence, require the implementation of `Copy` for `T` (which we do not
 /// for all the other, optional, traits).
 ///
@@ -172,7 +174,7 @@ impl<T> Display for Id<T>
 where
   T: Copy,
 {
-  /// Format the `Id` into the given formatter.
+  /// Format the `Id` with the given formatter.
   #[inline]
   fn fmt(&self, f: &mut Formatter<'_>) -> Result {
     write!(f, "{}", self.id)
@@ -196,6 +198,7 @@ mod tests {
   type TestId = Id<u32>;
 
 
+  /// Make sure that [`Id`] values are increasing.
   #[test]
   fn unique_id_increases() {
     let id1 = TestId::new();
@@ -205,6 +208,8 @@ mod tests {
     assert!(id2.get() > id1.get());
   }
 
+  /// Test that [`Id`] objects created on different threads preserve
+  /// uniqueness invariant.
   #[test]
   fn thread_safety() {
     #[allow(clippy::needless_collect)]
@@ -230,18 +235,24 @@ mod tests {
     test::<HashSet<TestId>>();
   }
 
+  /// Check that the [`Debug`] implementation of [`Id`] works as
+  /// expected.
   #[test]
   fn debug() {
     let id = unsafe { TestId::new_unchecked(42) };
     assert_eq!(format!("{:?}", id), "Id { id: 42 }");
   }
 
+  /// Check that the [`Display`] implementation of [`Id`] works as
+  /// expected.
   #[test]
   fn display() {
     let id = unsafe { TestId::new_unchecked(43) };
     assert_eq!(format!("{}", id), "43");
   }
 
+  /// Make sure that our [`Id`] type has expected memory layout and
+  /// size.
   #[test]
   fn size() {
     let id = Some(TestId::new());
