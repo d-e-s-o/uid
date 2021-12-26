@@ -1,5 +1,5 @@
-Unreleased
-----------
+0.1.7
+-----
 - Made `new_unchecked` constructor public
 
 
