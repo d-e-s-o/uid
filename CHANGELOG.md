@@ -3,6 +3,7 @@ Unreleased
 - Adjusted `Id::new` to panic when a `usize` counter overflow is
   detected
 - Annotated `Id` type with `#[repr(transparent)]`
+- Bumped minimum supported Rust version to `1.34`
 
 
 0.1.5
