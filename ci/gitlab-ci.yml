@@ -37,6 +37,12 @@ lint:clippy:
   - rustup component add clippy
   - cargo clippy --all-targets --all-features -- -D warnings
 
+format:rustfmt:
+  image: "rust:latest"
+  script:
+  - rustup toolchain install nightly -c rustfmt
+  - cargo +nightly fmt -- --check
+
 coverage:kcov:
   # Only executed on master because we keep artifacts around forever.
   only:

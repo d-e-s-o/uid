@@ -31,7 +31,7 @@
   unstable_features,
   unused_import_braces,
   unused_qualifications,
-  unused_results,
+  unused_results
 )]
 
 //! A crate providing in-memory IDs. Among others, the IDs are
@@ -217,9 +217,7 @@ mod tests {
     where
       T: FromIterator<TestId> + IntoIterator,
     {
-      let handles = (0..100)
-        .map(|_| spawn(TestId::new))
-        .collect::<Vec<_>>();
+      let handles = (0..100).map(|_| spawn(TestId::new)).collect::<Vec<_>>();
 
       let result = handles
         .into_iter()
