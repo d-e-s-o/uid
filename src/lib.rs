@@ -46,139 +46,194 @@ use core::fmt::Display;
 use core::fmt::Formatter;
 use core::fmt::Result;
 use core::marker::PhantomData;
+use core::num::NonZeroU16;
+use core::num::NonZeroU32;
+use core::num::NonZeroU64;
+use core::num::NonZeroU8;
 use core::num::NonZeroUsize;
+use core::sync::atomic::AtomicU16;
+use core::sync::atomic::AtomicU32;
+use core::sync::atomic::AtomicU64;
+use core::sync::atomic::AtomicU8;
 use core::sync::atomic::AtomicUsize;
 use core::sync::atomic::Ordering;
 
 
-/// A struct representing IDs usable for various purposes.
-///
-/// Except for [`Clone`], [`Copy`], [`Debug`], and [`Display`] which are
-/// implemented unconditionally, the type will only implement [`Eq`],
-/// [`Ord`], [`PartialEq`], [`PartialOrd`], and [`Hash`] if the provided
-/// `T` implements them.
-/// Note furthermore that we want all ID objects to be lightweight and,
-/// hence, require the implementation of `Copy` for `T` (which we do not
-/// for all the other, optional, traits).
-///
-/// # Examples
-///
-/// A commonly seen pattern for creating of a type `Id` that is unique
-/// may look as follows:
-/// ```rust
-/// use uid::Id as IdT;
-///
-/// #[derive(Copy, Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
-/// struct T(());
-///
-/// type Id = IdT<T>;
-///
-/// let id1 = Id::new();
-/// let id2 = Id::new();
-///
-/// assert_ne!(id1, id2)
-/// ```
-///
-/// In this example the type `T` is just an arbitrary type, but it
-/// allows us to create distinct ID types. For example, when another ID
-/// type is required for a different purpose, that can be easily
-/// created:
-/// ```rust
-/// # use uid::Id as IdT;
-/// # #[derive(Copy, Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
-/// # struct T(());
-/// # type Id = IdT<T>;
-/// #[derive(Copy, Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
-/// struct U(());
-///
-/// type Key = IdT<U>;
-///
-/// // `Key` and `Id` are fundamentally different types, with no
-/// // allowed interaction between each other. That is, Rust's type
-/// // system will prevent accidental usage of one in place of the
-/// // other. The same can be said about the relationship to built-in
-/// // numeric types such as `usize` or `u64`.
-/// ```
-#[derive(Clone, Copy, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[repr(transparent)]
-pub struct Id<T>
-where
-  T: Copy,
-{
-  id: NonZeroUsize,
-  phantom: PhantomData<T>,
-}
+macro_rules! IdImpl {
+  ( $(#[$docs:meta])* struct $name: ident, $int_type:ty, $non_zero_type:ty, $atomic_type: ty ) => {
+    $(#[$docs])*
+    #[derive(Clone, Copy, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[repr(transparent)]
+    pub struct $name<T>
+    where
+      T: Copy,
+    {
+      id: $non_zero_type,
+      phantom: PhantomData<T>,
+    }
 
-impl<T> Id<T>
-where
-  T: Copy,
-{
-  /// Create a new `Id` using the given value.
-  ///
-  /// # Safety
-  /// - `id` must not be zero
-  /// - `id` should be unique with respect to other IDs created for this
-  ///   `T` to preserve the invariant that IDs are unique
-  #[inline]
-  unsafe fn new_unchecked(id: usize) -> Self {
-    Self {
-      id: unsafe { NonZeroUsize::new_unchecked(id) },
-      phantom: PhantomData,
+    impl<T> $name<T>
+    where
+      T: Copy,
+    {
+      /// Create a new ID using the given value.
+      ///
+      /// # Safety
+      /// - `id` must not be zero
+      /// - `id` should be unique with respect to other IDs created for this
+      ///   `T` to preserve the invariant that IDs are unique
+      #[inline]
+      unsafe fn new_unchecked(id: $int_type) -> Self {
+        Self {
+          id: unsafe { <$non_zero_type>::new_unchecked(id) },
+          phantom: PhantomData,
+        }
+      }
+
+      /// Create a new unique ID.
+      #[inline]
+      pub fn new() -> Self {
+        static NEXT_ID: $atomic_type = <$atomic_type>::new(1);
+
+        let id = NEXT_ID.fetch_add(1, Ordering::Relaxed);
+        assert_ne!(
+          id, 0,
+          "overflow detected; please use a larger integer to or reconsider your use case"
+        );
+
+        // SAFETY: The provided ID cannot be 0 (unless we overflow, in which
+        //         case we have other problems). We ensure uniqueness
+        //         because we increment IDs and this is the only constructor
+        //         for ID objects.
+        unsafe { Self::new_unchecked(id) }
+      }
+
+      /// Retrieve the underlying integer value.
+      #[inline]
+      pub fn get(self) -> $int_type {
+        self.id.get()
+      }
+    }
+
+    impl<T> Default for $name<T>
+    where
+      T: Copy,
+    {
+      /// Create a new unique ID.
+      #[inline]
+      fn default() -> Self {
+        Self::new()
+      }
+    }
+
+    impl<T> Debug for $name<T>
+    where
+      T: Copy,
+    {
+      #[inline]
+      fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        f.debug_struct(stringify!($name))
+          .field("id", &self.id)
+          .finish()
+      }
+    }
+
+    impl<T> Display for $name<T>
+    where
+      T: Copy,
+    {
+      /// Format the ID with the given formatter.
+      #[inline]
+      fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        write!(f, "{}", self.id)
+      }
     }
   }
-
-  /// Create a new unique `Id`.
-  #[inline]
-  pub fn new() -> Self {
-    static NEXT_ID: AtomicUsize = AtomicUsize::new(1);
-
-    let id = NEXT_ID.fetch_add(1, Ordering::Relaxed);
-    assert_ne!(id, 0, "overflow detected; please reconsider your use case");
-
-    // SAFETY: The provided ID cannot be 0 (unless we overflow, in which
-    //         case we have other problems). We ensure uniqueness
-    //         because we increment IDs and this is the only constructor
-    //         for `Id` objects.
-    unsafe { Self::new_unchecked(id) }
-  }
-
-  /// Retrieve the underlying `usize` value.
-  #[inline]
-  pub fn get(self) -> usize {
-    self.id.get()
-  }
 }
 
-impl<T> Default for Id<T>
-where
-  T: Copy,
-{
-  /// Create a new unique `Id`.
-  #[inline]
-  fn default() -> Self {
-    Self::new()
-  }
-}
 
-impl<T> Debug for Id<T>
-where
-  T: Copy,
-{
-  #[inline]
-  fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-    f.debug_struct("Id").field("id", &self.id).finish()
-  }
+IdImpl! {
+  /// A struct representing IDs usable for various purposes.
+  ///
+  /// Except for [`Clone`], [`Copy`], [`Debug`], and [`Display`] which are
+  /// implemented unconditionally, the type will only implement [`Eq`],
+  /// [`Ord`], [`PartialEq`], [`PartialOrd`], and [`Hash`] if the provided
+  /// `T` implements them.
+  /// Note furthermore that we want all ID objects to be lightweight and,
+  /// hence, require the implementation of `Copy` for `T` (which we do not
+  /// for all the other, optional, traits).
+  ///
+  /// # Examples
+  ///
+  /// A commonly seen pattern for creating of a type `Id` that is unique
+  /// may look as follows:
+  /// ```rust
+  /// use uid::Id as IdT;
+  ///
+  /// #[derive(Copy, Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
+  /// struct T(());
+  ///
+  /// type Id = IdT<T>;
+  ///
+  /// let id1 = Id::new();
+  /// let id2 = Id::new();
+  ///
+  /// assert_ne!(id1, id2)
+  /// ```
+  ///
+  /// In this example the type `T` is just an arbitrary type, but it
+  /// allows us to create distinct ID types. For example, when another ID
+  /// type is required for a different purpose, that can be easily
+  /// created:
+  /// ```rust
+  /// # use uid::Id as IdT;
+  /// # #[derive(Copy, Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
+  /// # struct T(());
+  /// # type Id = IdT<T>;
+  /// #[derive(Copy, Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
+  /// struct U(());
+  ///
+  /// type Key = IdT<U>;
+  ///
+  /// // `Key` and `Id` are fundamentally different types, with no
+  /// // allowed interaction between each other. That is, Rust's type
+  /// // system will prevent accidental usage of one in place of the
+  /// // other. The same can be said about the relationship to built-in
+  /// // numeric types such as `usize` or `u64`.
+  /// ```
+  struct Id, usize, NonZeroUsize, AtomicUsize
 }
-
-impl<T> Display for Id<T>
-where
-  T: Copy,
-{
-  /// Format the `Id` with the given formatter.
-  #[inline]
-  fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-    write!(f, "{}", self.id)
-  }
+IdImpl! {
+  /// A struct representing IDs usable for various purposes using an eight
+  /// bit wide unsigned integer.
+  ///
+  /// Please see the [`Id`] type for more general information and usage
+  /// examples.
+  struct IdU8, u8, NonZeroU8, AtomicU8
+}
+IdImpl! {
+  /// A struct representing IDs usable for various purposes using an 16
+  /// bit wide unsigned integer.
+  ///
+  /// Please see the [`Id`] type for more general information and usage
+  /// examples.
+  struct IdU16, u16, NonZeroU16, AtomicU16
+}
+IdImpl! {
+  /// A struct representing IDs usable for various purposes using an 32
+  /// bit wide unsigned integer.
+  ///
+  /// Please see the [`Id`] type for more general information and usage
+  /// examples.
+  struct IdU32, u32, NonZeroU32, AtomicU32
+}
+IdImpl! {
+  /// A struct representing IDs usable for various purposes using an 64
+  /// bit wide unsigned integer.
+  ///
+  /// Please see the [`Id`] type for more general information and usage
+  /// examples.
+  struct IdU64, u64, NonZeroU64, AtomicU64
 }
 
 
@@ -239,6 +294,11 @@ mod tests {
   fn debug() {
     let id = unsafe { TestId::new_unchecked(42) };
     assert_eq!(format!("{:?}", id), "Id { id: 42 }");
+
+    type TestId2 = IdU16<()>;
+
+    let id = unsafe { TestId2::new_unchecked(1337) };
+    assert_eq!(format!("{:?}", id), "IdU16 { id: 1337 }");
   }
 
   /// Check that the [`Display`] implementation of [`Id`] works as
@@ -256,5 +316,10 @@ mod tests {
     let id = Some(TestId::new());
     assert_eq!(size_of_val(&id), size_of::<TestId>());
     assert_eq!(size_of::<TestId>(), size_of::<usize>());
+
+    assert_eq!(size_of::<IdU8<()>>(), size_of::<u8>());
+    assert_eq!(size_of::<IdU16<()>>(), size_of::<u16>());
+    assert_eq!(size_of::<IdU32<()>>(), size_of::<u32>());
+    assert_eq!(size_of::<IdU64<()>>(), size_of::<u64>());
   }
 }
