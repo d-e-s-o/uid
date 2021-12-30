@@ -170,7 +170,7 @@ IdImpl! {
   /// ```rust
   /// use uid::Id as IdT;
   ///
-  /// #[derive(Copy, Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
+  /// #[derive(Copy, Clone, Eq, PartialEq)]
   /// struct T(());
   ///
   /// type Id = IdT<T>;
@@ -187,10 +187,10 @@ IdImpl! {
   /// created:
   /// ```rust
   /// # use uid::Id as IdT;
-  /// # #[derive(Copy, Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
+  /// # #[derive(Copy, Clone)]
   /// # struct T(());
   /// # type Id = IdT<T>;
-  /// #[derive(Copy, Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
+  /// #[derive(Copy, Clone)]
   /// struct U(());
   ///
   /// type Key = IdT<U>;
