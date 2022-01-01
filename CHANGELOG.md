@@ -4,6 +4,7 @@ Unreleased
   detected
 - Removed `T: Copy` requirement for `Id` type
 - Annotated `Id` type with `#[repr(transparent)]`
+- Adjusted `Debug` representation to use tuple formatting
 - Bumped minimum supported Rust version to `1.34`
 
 

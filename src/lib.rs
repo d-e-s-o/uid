@@ -120,9 +120,7 @@ macro_rules! IdImpl {
     impl<T> Debug for $name<T> {
       #[inline]
       fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        f.debug_struct(stringify!($name))
-          .field("id", &self.id)
-          .finish()
+        f.debug_tuple(stringify!($name)).field(&self.id).finish()
       }
     }
 
@@ -275,12 +273,12 @@ mod tests {
   #[test]
   fn debug() {
     let id = unsafe { TestId::new_unchecked(42) };
-    assert_eq!(format!("{:?}", id), "Id { id: 42 }");
+    assert_eq!(format!("{:?}", id), "Id(42)");
 
     type TestId2 = IdU16<()>;
 
     let id = unsafe { TestId2::new_unchecked(1337) };
-    assert_eq!(format!("{:?}", id), "IdU16 { id: 1337 }");
+    assert_eq!(format!("{:?}", id), "IdU16(1337)");
   }
 
   /// Check that the [`Display`] implementation of [`Id`] works as
