@@ -2,6 +2,7 @@ Unreleased
 ----------
 - Adjusted `Id::new` to panic when a `usize` counter overflow is
   detected
+- Removed `T: Copy` requirement for `Id` type
 - Annotated `Id` type with `#[repr(transparent)]`
 - Bumped minimum supported Rust version to `1.34`
 

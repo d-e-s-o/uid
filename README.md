@@ -26,8 +26,8 @@ useful to have:
    newly crated IDs are guaranteed to never be the same.
 3) They are fully thread safe. That is, uniqueness is guaranteed even
    among different threads.
-4) IDs are immutable. Once created, an ID can be copied, hashed,
-   compared, and more, but it cannot be changed.
+4) IDs are immutable. Once created, an ID can (potentially) be copied,
+   hashed, compared, and more, but it cannot be changed.
 5) IDs can form name (or rather type) spaces. That is, an ID can be
    parametrized by an arbitrary (potentially private) type and only IDs
    that are parametrized by the same type can interact (i.e., be

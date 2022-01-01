@@ -64,18 +64,12 @@ macro_rules! IdImpl {
     $(#[$docs])*
     #[derive(Clone, Copy, Eq, Hash, Ord, PartialEq, PartialOrd)]
     #[repr(transparent)]
-    pub struct $name<T>
-    where
-      T: Copy,
-    {
+    pub struct $name<T> {
       id: $non_zero_type,
       phantom: PhantomData<T>,
     }
 
-    impl<T> $name<T>
-    where
-      T: Copy,
-    {
+    impl<T> $name<T> {
       /// Create a new ID using the given value.
       ///
       /// # Safety
@@ -115,10 +109,7 @@ macro_rules! IdImpl {
       }
     }
 
-    impl<T> Default for $name<T>
-    where
-      T: Copy,
-    {
+    impl<T> Default for $name<T> {
       /// Create a new unique ID.
       #[inline]
       fn default() -> Self {
@@ -126,10 +117,7 @@ macro_rules! IdImpl {
       }
     }
 
-    impl<T> Debug for $name<T>
-    where
-      T: Copy,
-    {
+    impl<T> Debug for $name<T> {
       #[inline]
       fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         f.debug_struct(stringify!($name))
@@ -138,10 +126,7 @@ macro_rules! IdImpl {
       }
     }
 
-    impl<T> Display for $name<T>
-    where
-      T: Copy,
-    {
+    impl<T> Display for $name<T> {
       /// Format the ID with the given formatter.
       #[inline]
       fn fmt(&self, f: &mut Formatter<'_>) -> Result {
@@ -155,13 +140,10 @@ macro_rules! IdImpl {
 IdImpl! {
   /// A struct representing IDs usable for various purposes.
   ///
-  /// Except for [`Clone`], [`Copy`], [`Debug`], and [`Display`] which are
-  /// implemented unconditionally, the type will only implement [`Eq`],
-  /// [`Ord`], [`PartialEq`], [`PartialOrd`], and [`Hash`] if the provided
-  /// `T` implements them.
-  /// Note furthermore that we want all ID objects to be lightweight and,
-  /// hence, require the implementation of `Copy` for `T` (which we do not
-  /// for all the other, optional, traits).
+  /// Except for [`Debug`] and [`Display`] which are implemented
+  /// unconditionally, the type will only implement [`Clone`],
+  /// [`Copy`], [`Eq`], [`Ord`], [`PartialEq`], [`PartialOrd`], and
+  /// [`Hash`] if the provided `T` implements them.
   ///
   /// # Examples
   ///
