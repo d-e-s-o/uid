@@ -44,14 +44,10 @@ format:rustfmt:
   - cargo +nightly fmt -- --check
 
 coverage:kcov:
-  # Only executed on master because we keep artifacts around forever.
-  only:
-  - master
   stage: test
   dependencies:
     - build:cargo
   artifacts:
-    expire_in: never
     paths:
     - kcov/
   coverage: '/^Coverage+:\s(\d+(?:\.\d+)?)/'
@@ -59,7 +55,7 @@ coverage:kcov:
   - echo 'deb http://deb.debian.org/debian testing main' >> /etc/apt/sources.list
   - echo 'deb http://deb.debian.org/debian unstable main' >> /etc/apt/sources.list
   - apt-get update
-  - apt-get install --assume-yes kcov
+  - apt-get install --assume-yes --allow-unauthenticated kcov
   - files=$(find target/debug -maxdepth 1 -type f -executable -iname "*-????????????????");
     covs="";
     for file in ${files}; do
