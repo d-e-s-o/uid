@@ -27,15 +27,15 @@ build:cargo:
       - target/
   script:
   - rustc --version && cargo --version
-  - cargo build --lib --tests --verbose
-  - cargo build --lib --tests --verbose --release
+  - cargo build --lib --tests
+  - cargo build --lib --tests --release
 
 test:cargo:
   stage: test
   dependencies:
   - build:cargo
   script:
-  - cargo test --verbose
+  - cargo test
 
 lint:clippy:
   image: "rust:latest"
