@@ -16,32 +16,26 @@ variables:
   # https://doc.rust-lang.org/rustc/codegen-options/index.html#debuginfo
   RUSTFLAGS: '-C debuginfo=0'
 
-stages:
-  - build
-  - test
-
-build:cargo:
-  stage: build
+build-debug:cargo:
   artifacts:
     paths:
       - target/
   script:
   - rustc --version && cargo --version
   - cargo build --lib --tests
+
+build-release:cargo:
+  script:
+  - rustc --version && cargo --version
   - cargo build --lib --tests --release
 
 test:cargo:
-  stage: test
-  dependencies:
-  - build:cargo
+  needs: ["build-debug:cargo"]
   script:
   - cargo test
 
 lint:clippy:
   image: "rust:latest"
-  stage: test
-  dependencies:
-    - build:cargo
   script:
   - rustup component add clippy
   - cargo clippy --all-targets --all-features -- -D warnings
@@ -53,9 +47,7 @@ format:rustfmt:
   - cargo +nightly fmt -- --check
 
 coverage:kcov:
-  stage: test
-  dependencies:
-    - build:cargo
+  needs: ["build-debug:cargo"]
   artifacts:
     paths:
     - kcov/
