@@ -72,6 +72,10 @@ macro_rules! IdImpl {
     impl<T> $name<T> {
       /// Create a new ID using the given value.
       ///
+      /// # Panics
+      /// This constructor panics if an overflow of the underlying
+      /// counter occurred.
+      ///
       /// # Safety
       /// - `id` must not be zero
       /// - `id` should be unique with respect to other IDs created for this
@@ -85,6 +89,10 @@ macro_rules! IdImpl {
       }
 
       /// Create a new unique ID.
+      ///
+      /// # Panics
+      /// This constructor panics if an overflow of the underlying
+      /// counter occurred.
       #[inline]
       pub fn new() -> Self {
         static NEXT_ID: $atomic_type = <$atomic_type>::new(1);
@@ -301,5 +309,15 @@ mod tests {
     assert_eq!(size_of::<IdU16<()>>(), size_of::<u16>());
     assert_eq!(size_of::<IdU32<()>>(), size_of::<u32>());
     assert_eq!(size_of::<IdU64<()>>(), size_of::<u64>());
+  }
+
+  /// Verify that we panic when we create more ID objects than the
+  /// underlying integer type can represent.
+  #[test]
+  #[should_panic(expected = "overflow detected")]
+  fn overflow() {
+    (0..256).for_each(|_| {
+      let _ = IdU8::<()>::new();
+    });
   }
 }
