@@ -1,5 +1,5 @@
-Unreleased
-----------
+0.1.6
+-----
 - Adjusted `Id::new` to panic when a `usize` counter overflow is
   detected
 - Removed `T: Copy` requirement for `Id` type
