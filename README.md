@@ -1,5 +1,5 @@
-[![pipeline](https://gitlab.com/d-e-s-o/uid/badges/main/pipeline.svg)](https://gitlab.com/d-e-s-o/uid/commits/main)
-[![coverage](https://gitlab.com/d-e-s-o/uid/badges/main/coverage.svg)](https://gitlab.com/d-e-s-o/uid/-/jobs/artifacts/main/file/tarpaulin-report/tarpaulin-report.html?job=coverage:tarpaulin)
+[![pipeline](https://github.com/d-e-s-o/uid/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/d-e-s-o/uid/actions/workflows/ci.yml)
+[![coverage](https://codecov.io/gh/d-e-s-o/uid/branch/main/graph/badge.svg)](https://codecov.io/gh/d-e-s-o/uid)
 [![crates.io](https://img.shields.io/crates/v/uid.svg)](https://crates.io/crates/uid)
 [![Docs](https://docs.rs/uid/badge.svg)](https://docs.rs/uid)
 [![rustc](https://img.shields.io/badge/rustc-1.34+-blue.svg)](https://blog.rust-lang.org/2019/04/11/Rust-1.34.0.html)
