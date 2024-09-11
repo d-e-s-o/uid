@@ -1,5 +1,5 @@
-Unreleased
-----------
+0.1.8
+-----
 - Switched to using GitHub Actions as CI provider
 
 
