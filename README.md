@@ -1,4 +1,4 @@
-[![pipeline](https://github.com/d-e-s-o/uid/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/d-e-s-o/uid/actions/workflows/ci.yml)
+[![pipeline](https://github.com/d-e-s-o/uid/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/d-e-s-o/uid/actions/workflows/test.yml)
 [![coverage](https://codecov.io/gh/d-e-s-o/uid/branch/main/graph/badge.svg)](https://codecov.io/gh/d-e-s-o/uid)
 [![crates.io](https://img.shields.io/crates/v/uid.svg)](https://crates.io/crates/uid)
 [![Docs](https://docs.rs/uid/badge.svg)](https://docs.rs/uid)
