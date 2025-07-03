@@ -1,7 +1,7 @@
 // Copyright (C) 2018-2025 Daniel Mueller <deso@posteo.net>
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-extern crate uid;
+//! Tests for `uid` crate in `std` contexts.
 
 use uid::Id;
 

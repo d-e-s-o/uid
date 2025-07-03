@@ -2,21 +2,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #![no_std]
-#![warn(
-  future_incompatible,
-  missing_copy_implementations,
-  missing_debug_implementations,
-  missing_docs,
-  rust_2018_compatibility,
-  rust_2018_idioms,
-  trivial_casts,
-  trivial_numeric_casts,
-  unsafe_op_in_unsafe_fn,
-  unstable_features,
-  unused_import_braces,
-  unused_qualifications,
-  unused_results
-)]
 
 //! A crate providing in-memory IDs. Among others, the IDs are
 //! guaranteed to be unique, even when created on different threads.
@@ -239,7 +224,6 @@ mod tests {
   /// uniqueness invariant.
   #[test]
   fn thread_safety() {
-    #[allow(clippy::needless_collect)]
     fn test<T>()
     where
       T: FromIterator<TestId> + IntoIterator,
