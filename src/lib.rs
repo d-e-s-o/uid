@@ -265,12 +265,12 @@ mod tests {
   #[test]
   fn debug() {
     let id = unsafe { TestId::new_unchecked(42) };
-    assert_eq!(format!("{:?}", id), "Id(42)");
+    assert_eq!(format!("{id:?}"), "Id(42)");
 
     type TestId2 = IdU16<()>;
 
     let id = unsafe { TestId2::new_unchecked(1337) };
-    assert_eq!(format!("{:?}", id), "IdU16(1337)");
+    assert_eq!(format!("{id:?}"), "IdU16(1337)");
   }
 
   /// Check that the [`Display`] implementation of [`Id`] works as
@@ -278,7 +278,7 @@ mod tests {
   #[test]
   fn display() {
     let id = unsafe { TestId::new_unchecked(43) };
-    assert_eq!(format!("{}", id), "43");
+    assert_eq!(format!("{id}"), "43");
   }
 
   /// Make sure that our [`Id`] type has expected memory layout and
