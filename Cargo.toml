@@ -7,6 +7,7 @@ license = "GPL-3.0-or-later"
 homepage = "https://github.com/d-e-s-o/uid"
 repository = "https://github.com/d-e-s-o/uid.git"
 readme = "README.md"
+documentation = "https://docs.rs/uid"
 categories = ["no-std", "data-structures", "concurrency"]
 keywords = ["id", "number", "type", "unique"]
 description = """
