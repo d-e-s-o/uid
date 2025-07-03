@@ -1,3 +1,8 @@
+Unreleased
+----------
+- Bumped minimum supported Rust version to `1.58`
+
+
 0.1.8
 -----
 - Switched to using GitHub Actions as CI provider

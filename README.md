@@ -2,7 +2,7 @@
 [![coverage](https://codecov.io/gh/d-e-s-o/uid/branch/main/graph/badge.svg)](https://codecov.io/gh/d-e-s-o/uid)
 [![crates.io](https://img.shields.io/crates/v/uid.svg)](https://crates.io/crates/uid)
 [![Docs](https://docs.rs/uid/badge.svg)](https://docs.rs/uid)
-[![rustc](https://img.shields.io/badge/rustc-1.34+-blue.svg)](https://blog.rust-lang.org/2019/04/11/Rust-1.34.0.html)
+[![rustc](https://img.shields.io/badge/rustc-1.58+-blue.svg)](https://blog.rust-lang.org/2022/01/13/Rust-1.58.0/)
 
 uid
 ===
