@@ -1,4 +1,4 @@
-// Copyright (C) 2018-2025 Daniel Mueller <deso@posteo.net>
+// Copyright (C) 2018-2026 Daniel Mueller <deso@posteo.net>
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #![no_std]
@@ -69,7 +69,7 @@ macro_rules! IdImpl {
         let id = NEXT_ID.fetch_add(1, Ordering::Relaxed);
         assert_ne!(
           id, 0,
-          "overflow detected; please use a larger integer to or reconsider your use case"
+          "overflow detected; please use a larger integer or reconsider your use case"
         );
 
         // SAFETY: The provided ID cannot be 0 (unless we overflow, in which
