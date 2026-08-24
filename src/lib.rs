@@ -50,7 +50,7 @@ macro_rules! IdImpl {
       /// - `id` should be unique with respect to other IDs created for this
       ///   `T` to preserve the invariant that IDs are unique
       #[inline]
-      pub unsafe fn new_unchecked(id: $int_type) -> Self {
+      pub const unsafe fn new_unchecked(id: $int_type) -> Self {
         Self {
           id: unsafe { <$non_zero_type>::new_unchecked(id) },
           phantom: PhantomData,

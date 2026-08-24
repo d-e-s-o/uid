@@ -1,5 +1,6 @@
 Unreleased
 ----------
+- Made `Id::new_unchecked` constructor `const`
 - Bumped minimum supported Rust version to `1.58`
 
 
